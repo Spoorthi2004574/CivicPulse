@@ -1,0 +1,303 @@
+/* Progress Tracker Container */
+.progress-tracker {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    margin-bottom: 24px;
+}
+
+.progress-tracker-header {
+    margin-bottom: 20px;
+}
+
+.tracker-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1f2937;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+}
+
+.tracker-icon {
+    font-size: 22px;
+}
+
+/* Progress Bar */
+.progress-bar-container {
+    margin-bottom: 32px;
+}
+
+.progress-bar-bg {
+    height: 8px;
+    background: #e5e7eb;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 50%, #43e97b 100%);
+    border-radius: 10px;
+    transition: width 0.6s ease;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
+}
+
+/* Stages Container */
+.stages-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+.stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+}
+
+.stage-marker {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+    width: 100%;
+}
+
+.stage-circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #e5e7eb;
+    border: 3px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 18px;
+    color: #9ca3af;
+    transition: all 0.3s ease;
+    z-index: 2;
+    position: relative;
+}
+
+.stage.completed .stage-circle {
+    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    border-color: #43e97b;
+    color: white;
+    box-shadow: 0 4px 12px rgba(67, 233, 123, 0.4);
+}
+
+.stage.current .stage-circle {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-color: #667eea;
+    color: white;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    animation: pulse-ring 2s infinite;
+}
+
+.checkmark {
+    font-size: 24px;
+}
+
+.stage-number {
+    font-size: 20px;
+}
+
+.stage-line {
+    flex: 1;
+    height: 3px;
+    background: #e5e7eb;
+    margin-left: -25px;
+    transition: background 0.3s ease;
+}
+
+.stage-line.completed {
+    background: linear-gradient(90deg, #43e97b 0%, #38f9d7 100%);
+}
+
+.stage-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.stage-icon {
+    font-size: 32px;
+    margin-bottom: 4px;
+}
+
+.stage-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.stage-description {
+    font-size: 13px;
+    color: #6b7280;
+    margin-top: 4px;
+}
+
+.stage-timestamp {
+    font-size: 11px;
+    color: #9ca3af;
+    margin-top: 4px;
+    font-weight: 500;
+}
+
+.stage.completed .stage-name {
+    color: #43e97b;
+}
+
+.stage.current .stage-name {
+    color: #667eea;
+}
+
+/* Proof of Work Section */
+.proof-section {
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 2px solid #f3f4f6;
+}
+
+.proof-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.proof-icon {
+    font-size: 24px;
+}
+
+.proof-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.proof-content {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.proof-image {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.proof-image:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.proof-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.proof-label {
+    font-size: 14px;
+    color: #6b7280;
+    margin: 0;
+}
+
+.proof-date {
+    font-size: 13px;
+    color: #9ca3af;
+    margin: 0;
+}
+
+.btn-view-proof {
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 8px;
+    align-self: flex-start;
+}
+
+.btn-view-proof:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+/* Animations */
+@keyframes pulse-ring {
+
+    0%,
+    100% {
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+
+    50% {
+        box-shadow: 0 4px 20px rgba(102, 126, 234, 0.6), 0 0 0 8px rgba(102, 126, 234, 0.1);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .stages-container {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+
+    .stage-line {
+        display: none;
+    }
+
+    .proof-content {
+        flex-direction: column;
+    }
+
+    .proof-image {
+        width: 100%;
+        height: auto;
+        max-height: 300px;
+    }
+}
+
+@media (max-width: 480px) {
+    .progress-tracker {
+        padding: 16px;
+    }
+
+    .tracker-title {
+        font-size: 16px;
+    }
+
+    .stage-circle {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+    }
+
+    .stage-icon {
+        font-size: 24px;
+    }
+
+    .stage-name {
+        font-size: 14px;
+    }
+}

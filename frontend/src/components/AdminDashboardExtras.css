@@ -1,0 +1,61 @@
+/* Table Header Enhancements */
+.complaints-table thead th {
+    cursor: help;
+    transition: all 0.3s ease;
+}
+
+.complaints-table thead th:hover {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
+}
+
+.th-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-weight: 700;
+}
+
+.th-icon {
+    font-size: 16px;
+    opacity: 0.8;
+}
+
+/* Created Column Styles */
+.created-cell {
+    text-align: center;
+    font-size: 13px;
+}
+
+.time-text {
+    color: #6c757d;
+    font-size: 11px;
+}
+
+/* Enhanced Tooltips */
+.complaints-table th[title]:hover::after {
+    content: attr(title);
+    position: absolute;
+    background: #1f2937;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+    z-index: 1000;
+    margin-top: 40px;
+    margin-left: -50px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive Table Improvements */
+@media (max-width: 1200px) {
+    .th-icon {
+        font-size: 14px;
+    }
+
+    .th-content {
+        font-size: 13px;
+    }
+}
