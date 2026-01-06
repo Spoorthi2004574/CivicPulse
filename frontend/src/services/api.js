@@ -57,15 +57,46 @@ export const complaintAPI = {
   },
   getMyComplaints: () => api.get('/api/complaints/my'),
   getAllComplaints: () => api.get('/api/complaints/all'),
-  assignComplaint: (id, officerId, priority) =>
-    api.put(`/api/complaints/${id}/assign?officerId=${officerId}&priority=${priority}`),
+  assignComplaint: (id, officerId, priority, deadline) => {
+    let url = `/api/complaints/${id}/assign?officerId=${officerId}&priority=${priority}`
+    if (deadline) {
+      url += `&deadline=${deadline}`
+    }
+    return api.put(url)
+  },
   updateStatus: (id, status) =>
     api.put(`/api/complaints/${id}/status?status=${status}`),
   checkDuplicates: (id) => api.get(`/api/complaints/${id}/duplicates`),
+  getStatistics: () => api.get('/api/complaints/statistics'),
+  getOfficersWithWorkload: () => api.get('/api/complaints/officers/workload'),
+  escalateComplaint: (id, reason) => {
+    let url = `/api/complaints/${id}/escalate`
+    if (reason) {
+      url += `?reason=${encodeURIComponent(reason)}`
+    }
+    return api.post(url)
+  },
+  getEscalationHistory: (id) => api.get(`/api/complaints/${id}/escalation-history`),
+  getOfficerComplaints: () => api.get('/api/complaints/officer/my'),
+  uploadProof: (id, formData) => {
+    return api.post(`/api/complaints/${id}/proof`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+  },
+  validateComplaint: (id) => api.post(`/api/complaints/${id}/validate`),
+  rejectComplaint: (id, reason) =>
+    api.post(`/api/complaints/${id}/reject?reason=${encodeURIComponent(reason)}`),
+  rateComplaint: (id, rating, feedback) => {
+    let url = `/api/complaints/${id}/rate?rating=${rating}`
+    if (feedback) {
+      url += `&feedback=${encodeURIComponent(feedback)}`
+    }
+    return api.post(url)
+  },
+  reopenComplaint: (id, reason) =>
+    api.post(`/api/complaints/${id}/reopen?reason=${encodeURIComponent(reason)}`),
 }
 
 export default api
-
-
-
-

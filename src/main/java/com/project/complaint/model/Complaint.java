@@ -53,6 +53,55 @@ public class Complaint {
     @JoinColumn(name = "officer_id")
     private User assignedOfficer;
 
+    @Column(name = "deadline")
+    private LocalDateTime deadline;
+
+    @Column(name = "escalated")
+    private Boolean escalated = false;
+
+    @Column(name = "escalated_at")
+    private LocalDateTime escalatedAt;
+
+    @Column(name = "escalation_reason", length = 500)
+    private String escalationReason;
+
+    @Column(name = "proof_of_work_url")
+    private String proofOfWorkUrl;
+
+    @Column(name = "proof_of_work_uploaded_at")
+    private LocalDateTime proofOfWorkUploadedAt;
+
+    @Column(name = "validation_status")
+    private String validationStatus; // PENDING_VALIDATION, VALIDATED, REJECTED_BY_ADMIN
+
+    @Column(name = "rejection_reason", length = 1000)
+    private String rejectionReason;
+
+    @ManyToOne
+    @JoinColumn(name = "validated_by")
+    private User validatedBy;
+
+    @Column(name = "validated_at")
+    private LocalDateTime validatedAt;
+
+    @Column(name = "rating")
+    private Integer rating; // 1-5 stars, null if not rated
+
+    @Column(name = "feedback", length = 1000)
+    private String feedback; // Optional feedback from citizen
+
+    @Column(name = "rated_at")
+    private LocalDateTime ratedAt;
+
+    @Column(name = "reopened")
+    private Boolean reopened = false;
+
+    @Column(name = "reopened_at")
+    private LocalDateTime reopenedAt;
+
+    @Column(name = "reopen_reason", length = 500)
+    private String reopenReason;
+
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
