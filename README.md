@@ -1,268 +1,133 @@
 # CivicPulse Hub – Unified Smart City Feedback System
 
-## Authentication Module
+CivicPulse Hub is a modern, full-stack smart city management platform designed to bridge the gap between citizens and local government. It streamlines the process of reporting, tracking, and resolving urban issues through an intelligent, role-based workflow.
 
-A complete Spring Boot backend authentication system with JWT, Spring Security, and role-based access control.
+## 🌟 Key Modules & Features
 
-### Features
+### 🔐 Authentication & Security
+- **Role-Based Access Control (RBAC)**: Secure access for **Citizens**, **Officers**, and **Admins**.
+- **JWT Authentication**: Secure, stateless token-based authentication.
+- **Officer Verification**: Multi-step onboarding process requiring Admin approval and a secure Secret Key for officer logins.
+- **Secure Storage**: BCrypt hashing for passwords and sensitive keys.
 
-- **User Roles**: CITIZEN, OFFICER, ADMIN
-- **JWT Authentication**: Secure token-based authentication
-- **Role-based Access Control**: Different access levels for different user types
-- **Officer Approval System**: Admin approval required for officers with secret key generation
-- **Password Hashing**: BCrypt password encryption
-- **Secret Key Hashing**: Secure secret key storage for officers
+### 📝 Complaint Management Module
+- **Intuitive Filing**: Citizens can report issues with descriptions, departments, and geographic locations.
+- **Photo Support**: Upload visual evidence (photos) directly with complaints.
+- **Smart Assignment**: Admins can assign complaints to the most suitable officers based on current **Workload Awareness** (least busy officers recommended first).
+- **Duplicate Detection**: automatic identification of similar reports to reduce redundancy.
+- **Progress Tracking**: Real-time visual tracker for citizens to monitor their complaint's journey from "Pending" to "Resolved".
 
-### Technology Stack
+### ⚖️ Workload & Escalation System
+- **Priority-Based SLAs**: Automatic deadline calculation based on priority (High: 48h, Medium: 96h, Low: 168h).
+- **Automated Escalation**: Hourly background jobs identify overdue tasks and escalate them to Admin oversight.
+- **Workload Balancing**: Real-time monitoring of officer task loads to ensure efficient distribution.
+- **Audit Trail**: Full escalation history tracking for every complaint.
 
-**Backend:**
-- Spring Boot 3.2.0
-- Spring Security 6
-- JWT (jjwt 0.12.3)
-- PostgreSQL Database
-- JPA/Hibernate
-- Lombok
+### 💬 Feedback & Validation Module
+- **Proof of Work**: Officers must upload visual proof and descriptions before marking a task as resolved.
+- **Admin Validation**: Multi-stage verification where Admins review officer submissions before final resolution.
+- **Citizen Rating System**: Multi-faceted feedback loop including 1-5 star ratings and detailed comments.
+- **Satisfaction Tracking**: Citizens can explicitly mark their satisfaction and trigger complaint **Reopening** if the resolution is unsatisfactory.
+- **Performance Analytics**: Real-time rating statistics and feedback summaries for officers.
 
-**Frontend:**
-- React 18.2.0
-- React Router 6.20.0
-- Axios 1.6.2
-- Vite 5.0.8
-- React Toastify
+---
+
+## 🛠 Technology Stack
+
+### Backend
+- **Framework**: Spring Boot 3.2.0
+- **Security**: Spring Security 6 & JWT
+- **Database**: PostgreSQL
+- **ORM**: JPA / Hibernate
+- **Tools**: Lombok, Maven
+
+### Frontend
+- **Library**: React 18.2.0
+- **Build Tool**: Vite
+- **Styling**: Modern Vanilla CSS with Glassmorphism & Animations
+- **Utilities**: Axios, React Router 6, React Toastify
+
+---
+
+## 🚀 Getting Started
 
 ### Prerequisites
-
-- Java 17 or higher
-- PostgreSQL 12 or higher
+- Java 17+
+- PostgreSQL 12+
+- Node.js 16+ & npm
 - Maven 3.6+
-- Node.js 16+ and npm (for frontend)
 
-### Backend Setup Instructions
+### Quick Setup
 
 1. **Database Setup**
-   - Create a PostgreSQL database named `civicpulse_db`
-   - Update database credentials in `src/main/resources/application.properties`
+   - Create a PostgreSQL database: `civicpulse_db`
+   - Update `src/main/resources/application.properties` with your credentials.
 
-2. **Configure Application Properties**
-   - Edit `src/main/resources/application.properties`:
-     ```properties
-     spring.datasource.username=your_username
-     spring.datasource.password=your_password
-     jwt.secret=your-secret-key-min-256-bits-required
-     ```
-
-3. **Build and Run Backend**
+2. **Backend Execution**
    ```bash
    mvn clean install
    mvn spring-boot:run
    ```
-   Backend will run on `http://localhost:8080`
+   *Runs on http://localhost:8080*
 
-### Frontend Setup Instructions
-
-1. **Navigate to frontend directory**
+3. **Frontend Execution**
    ```bash
    cd frontend
-   ```
-
-2. **Install dependencies**
-   ```bash
    npm install
-   ```
-
-3. **Run development server**
-   ```bash
    npm run dev
    ```
-   Frontend will run on `http://localhost:3000`
+   *Runs on http://localhost:3000*
 
-5. **Default Admin Account**
-   - Email: `admin@civicpulse.com`
-   - Password: `Admin@123`
-   - Created automatically on first run
+4. **Default Admin Credentials**
+   - **Email**: `admin@civicpulse.com`
+   - **Password**: `Admin@123`
 
-### API Endpoints
+---
 
-#### Public Endpoints
+## 📁 Project Structure
 
-##### 1. User Signup
-- **URL**: `POST /auth/signup`
-- **Access**: Public
-- **Request Body**:
-  ```json
-  {
-    "name": "John Doe",
-    "email": "john@example.com",
-    "password": "password123",
-    "role": "CITIZEN",
-    "department": null
-  }
-  ```
-- **Response**: JWT token with user information
-
-**For Officer Signup**:
-  ```json
-  {
-    "name": "Jane Officer",
-    "email": "jane@city.gov",
-    "password": "password123",
-    "role": "OFFICER",
-    "department": "Transportation"
-  }
-  ```
-- **Note**: Officer accounts are set to `PENDING_VERIFICATION` status and require admin approval
-
-##### 2. User Login
-- **URL**: `POST /auth/login`
-- **Access**: Public
-- **Request Body** (Citizen):
-  ```json
-  {
-    "email": "john@example.com",
-    "password": "password123"
-  }
-  ```
-- **Request Body** (Officer):
-  ```json
-  {
-    "email": "jane@city.gov",
-    "password": "password123",
-    "secretKey": "generated-secret-key-here"
-  }
-  ```
-- **Response**: JWT token with user information
-
-#### Admin Endpoints (Require ADMIN role)
-
-##### 3. Get Pending Officers
-- **URL**: `GET /admin/officers/pending`
-- **Access**: ADMIN only
-- **Headers**: `Authorization: Bearer <jwt_token>`
-- **Response**: List of pending officer accounts
-
-##### 4. Approve Officer
-- **URL**: `POST /admin/officers/{id}/approve`
-- **Access**: ADMIN only
-- **Headers**: `Authorization: Bearer <jwt_token>`
-- **Response**: Officer details with generated secret key
-  ```json
-  {
-    "officerId": 1,
-    "officerName": "Jane Officer",
-    "officerEmail": "jane@city.gov",
-    "department": "Transportation",
-    "secretKey": "AbCdEfGhIjKlMnOpQrStUvWxYz123456",
-    "message": "Officer approved successfully"
-  }
-  ```
-
-### User Roles and Flows
-
-#### CITIZEN
-1. Signs up with name, email, password
-2. Account is immediately activated (status: ACTIVE)
-3. Can login with email + password only
-4. No admin approval required
-
-#### OFFICER
-1. Signs up with name, email, password, department
-2. Account status set to PENDING_VERIFICATION
-3. Cannot login until approved by admin
-4. Admin approves → secret key generated
-5. Officer logs in with email + password + secret key
-
-#### ADMIN
-1. Admin accounts are created manually or via data initializer
-2. Cannot signup through public API
-3. Full access to all endpoints
-
-### Security Features
-
-- **JWT Tokens**: Stateless authentication
-- **Password Hashing**: BCrypt with salt
-- **Secret Key Hashing**: Secure storage of officer secret keys
-- **Role-based Authorization**: Spring Security method-level security
-- **CORS Configuration**: Cross-origin resource sharing enabled
-
-### Project Structure
-
-```
-src/main/java/com/project/auth/
-├── config/
-│   ├── DataInitializer.java
-│   └── SecurityConfig.java
-├── controller/
-│   ├── AdminController.java
-│   └── AuthController.java
-├── dto/
-│   ├── ApproveOfficerResponse.java
-│   ├── JwtResponse.java
-│   ├── LoginRequest.java
-│   ├── SignupRequest.java
-│   └── UserResponse.java
-├── entity/
-│   ├── Role.java
-│   ├── Status.java
-│   └── User.java
-├── exception/
-│   └── GlobalExceptionHandler.java
-├── repository/
-│   └── UserRepository.java
-├── security/
-│   ├── CustomUserDetailsService.java
-│   ├── JwtAuthenticationFilter.java
-│   └── JwtUtil.java
-├── service/
-│   ├── AdminService.java
-│   ├── AuthService.java
-│   └── impl/
-│       ├── AdminServiceImpl.java
-│       └── AuthServiceImpl.java
-└── util/
-    └── SecretKeyGenerator.java
+```text
+CivicPulse/
+├── src/main/java/com/project/
+│   ├── auth/             # JWT, RBAC, and User Management
+│   ├── complaint/        # Complaint logic, Escalations, and Feedback
+│   └── config/           # Security and App configurations
+├── frontend/
+│   ├── src/
+│   │   ├── components/   # UI Components (Dashboards, Forms, Modals)
+│   │   ├── services/     # API Integration (Axios)
+│   │   └── context/      # Auth State Management
+└── uploads/              # Storage for complaint photos and proof-of-work
 ```
 
-### Testing the API
+---
 
-You can use tools like Postman or cURL to test the endpoints.
+## 📈 API Overview
 
-**Example: Citizen Signup**
-```bash
-curl -X POST http://localhost:8080/auth/signup \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "John Doe",
-    "email": "john@example.com",
-    "password": "password123",
-    "role": "CITIZEN"
-  }'
-```
+### Authentication
+- `POST /auth/signup` - Register a new Citizen or Officer
+- `POST /auth/login` - Secure login for all roles
 
-**Example: Admin Login**
-```bash
-curl -X POST http://localhost:8080/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{
-    "email": "admin@civicpulse.com",
-    "password": "Admin@123"
-  }'
-```
+### Admin Operations
+- `GET /admin/officers/pending` - List officers awaiting approval
+- `POST /admin/officers/{id}/approve` - Approve officer and generate Secret Key
+- `GET /api/complaints/officers/workload` - Monitor staff workload
 
-**Example: Get Pending Officers (Admin)**
-```bash
-curl -X GET http://localhost:8080/admin/officers/pending \
-  -H "Authorization: Bearer <jwt_token>"
-```
+### Complaint Workflow
+- `POST /api/complaints` - File a new complaint (Multipart/Form-Data)
+- `PUT /api/complaints/{id}/assign` - Assign to officer with priority/deadline
+- `POST /api/complaints/{id}/proof` - Upload officer proof of work
+- `POST /api/complaints/{id}/validate` - Final Admin approval of resolution
+- `POST /api/complaints/{id}/rate` - Citizen feedback submission
+- `POST /api/complaints/{id}/reopen` - Re-active a resolved issue
 
-### Notes
+---
 
-- JWT tokens expire after 24 hours (configurable in `application.properties`)
-- Secret keys are 32-character random strings
-- All passwords and secret keys are hashed using BCrypt
-- Admin signup is disabled for security reasons
-- Officer accounts must be approved before they can login
+## 📄 Documentation Links
+- [Detailed Setup Guide](./SETUP_GUIDE.md)
+- [PostgreSQL Configuration](./POSTGRESQL_SETUP.md)
+- [Implementation Status](./IMPLEMENTATION_STATUS.md)
 
-### License
-
-This project is part of the CivicPulse Hub system.
+---
+© 2024 CivicPulse Hub. All rights reserved.
 
