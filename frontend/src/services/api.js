@@ -97,6 +97,9 @@ export const complaintAPI = {
   },
   reopenComplaint: (id, reason) =>
     api.post(`/api/complaints/${id}/reopen?reason=${encodeURIComponent(reason)}`),
+  markSatisfied: (id, satisfied) =>
+    api.post(`/api/complaints/${id}/satisfied?satisfied=${satisfied}`),
+  getOfficerRatings: () => api.get('/api/complaints/officer/ratings'),
 }
 
 export default api

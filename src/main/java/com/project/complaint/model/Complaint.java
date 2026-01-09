@@ -93,6 +93,12 @@ public class Complaint {
     @Column(name = "rated_at")
     private LocalDateTime ratedAt;
 
+    @Column(name = "satisfied")
+    private Boolean satisfied = false;
+
+    @Column(name = "satisfied_at")
+    private LocalDateTime satisfiedAt;
+
     @Column(name = "reopened")
     private Boolean reopened = false;
 

@@ -399,6 +399,18 @@ const AdminComplaintDashboard = () => {
                                     Created
                                 </span>
                             </th>
+                            <th title="Citizen rating (1-5 stars)">
+                                <span className="th-content">
+                                    <span className="th-icon">⭐</span>
+                                    Rating
+                                </span>
+                            </th>
+                            <th title="Citizen satisfaction status">
+                                <span className="th-content">
+                                    <span className="th-icon">😊</span>
+                                    Satisfied
+                                </span>
+                            </th>
                             <th title="Available actions for this complaint">
                                 <span className="th-content">
                                     <span className="th-icon">⚙️</span>
@@ -463,6 +475,24 @@ const AdminComplaintDashboard = () => {
                                     {new Date(complaint.createdAt).toLocaleDateString()}
                                     <br />
                                     <small className="time-text">{new Date(complaint.createdAt).toLocaleTimeString()}</small>
+                                </td>
+                                <td className="rating-cell">
+                                    {complaint.rating ? (
+                                        <span className="rating-display-admin">
+                                            {'⭐'.repeat(complaint.rating)} ({complaint.rating}/5)
+                                        </span>
+                                    ) : (
+                                        <span className="no-rating">Not rated</span>
+                                    )}
+                                </td>
+                                <td className="satisfaction-cell">
+                                    {complaint.satisfied ? (
+                                        <span className="satisfaction-badge-admin satisfied">✅ Yes</span>
+                                    ) : complaint.rating ? (
+                                        <span className="satisfaction-badge-admin not-satisfied">❌ No</span>
+                                    ) : (
+                                        <span className="satisfaction-badge-admin not-rated">-</span>
+                                    )}
                                 </td>
                                 <td>
                                     <div className="action-buttons">

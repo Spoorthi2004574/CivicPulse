@@ -206,4 +206,34 @@ public class ComplaintController {
             return ResponseEntity.status(500).body("Error reopening complaint: " + e.getMessage());
         }
     }
+
+    @PostMapping("/{id}/satisfied")
+    public ResponseEntity<?> markSatisfied(
+            @PathVariable Long id,
+            @RequestParam Boolean satisfied) {
+        try {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            String email = auth.getName();
+
+            Complaint updated = complaintService.markSatisfied(id, email, satisfied);
+            return ResponseEntity.ok(updated);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("Error marking satisfaction: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/officer/ratings")
+    public ResponseEntity<?> getOfficerRatings() {
+        try {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            String email = auth.getName();
+
+            java.util.Map<String, Object> stats = complaintService.getOfficerRatingsStatistics(email);
+            return ResponseEntity.ok(stats);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("Error fetching ratings: " + e.getMessage());
+        }
+    }
 }

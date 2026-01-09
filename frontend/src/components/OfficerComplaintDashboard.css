@@ -176,6 +176,40 @@
     font-weight: 600;
 }
 
+.stat-card-overdue::before {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+}
+
+.stat-card-rating::before {
+    background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+}
+
+.stat-card-satisfaction::before {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+}
+
+.stat-card-rating .stat-icon {
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.1) 0%, rgba(255, 152, 0, 0.1) 100%);
+}
+
+.stat-card-satisfaction .stat-icon {
+    background: linear-gradient(135deg, rgba(40, 167, 69, 0.1) 0%, rgba(32, 201, 151, 0.1) 100%);
+}
+
+.stat-card-rating .stat-value {
+    background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.stat-card-satisfaction .stat-value {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
 /* Complaints Section */
 .complaints-section {
     background: white;
@@ -407,6 +441,39 @@
 .detail-value {
     color: #374151;
     flex: 1;
+}
+
+.rating-info .detail-value {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.satisfied-badge-small {
+    background: linear-gradient(135deg, #d1e7dd 0%, #badbcc 100%);
+    color: #0f5132;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-left: 8px;
+}
+
+.feedback-info {
+    flex-direction: column;
+    align-items: flex-start !important;
+    background: linear-gradient(135deg, #fff3cd 0%, #ffe69c 100%);
+    padding: 12px;
+    border-radius: 8px;
+    border-left: 3px solid #ffc107;
+}
+
+.feedback-text {
+    font-style: italic;
+    color: #666 !important;
+    margin-top: 6px;
+    line-height: 1.5;
 }
 
 .status-actions {

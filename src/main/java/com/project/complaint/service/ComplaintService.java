@@ -345,7 +345,105 @@ public class ComplaintService {
         complaint.setRating(null); // Clear any previous rating
         complaint.setFeedback(null);
         complaint.setRatedAt(null);
+        complaint.setSatisfied(false); // Clear satisfaction status
+        complaint.setSatisfiedAt(null);
 
         return complaintRepository.save(complaint);
+    }
+
+    /**
+     * Mark a complaint as satisfied (citizen only)
+     */
+    public Complaint markSatisfied(Long complaintId, String citizenEmail, Boolean satisfied) {
+        Complaint complaint = complaintRepository.findById(complaintId)
+                .orElseThrow(() -> new RuntimeException("Complaint not found"));
+
+        User citizen = userRepository.findByEmail(citizenEmail)
+                .orElseThrow(() -> new RuntimeException("Citizen not found"));
+
+        // Verify the citizen owns this complaint
+        if (!complaint.getCitizen().getId().equals(citizen.getId())) {
+            throw new RuntimeException("You can only mark satisfaction for your own complaints");
+        }
+
+        // Verify complaint is resolved and rated
+        if (!"RESOLVED".equals(complaint.getStatus())) {
+            throw new RuntimeException("You can only mark satisfaction for resolved complaints");
+        }
+
+        if (complaint.getRating() == null) {
+            throw new RuntimeException("Please rate the complaint before marking satisfaction");
+        }
+
+        complaint.setSatisfied(satisfied);
+        complaint.setSatisfiedAt(satisfied ? java.time.LocalDateTime.now() : null);
+
+        return complaintRepository.save(complaint);
+    }
+
+    /**
+     * Get ratings statistics for an officer
+     */
+    public java.util.Map<String, Object> getOfficerRatingsStatistics(String officerEmail) {
+        User officer = userRepository.findByEmail(officerEmail)
+                .orElseThrow(() -> new RuntimeException("Officer not found"));
+
+        List<Complaint> ratedComplaints = complaintRepository
+                .findByAssignedOfficerIdOrderByCreatedAtDesc(officer.getId())
+                .stream()
+                .filter(c -> c.getRating() != null)
+                .collect(java.util.stream.Collectors.toList());
+
+        java.util.Map<String, Object> stats = new java.util.HashMap<>();
+
+        if (ratedComplaints.isEmpty()) {
+            stats.put("totalRatings", 0);
+            stats.put("averageRating", 0.0);
+            stats.put("satisfactionRate", 0.0);
+            stats.put("ratings", new java.util.ArrayList<>());
+            return stats;
+        }
+
+        double avgRating = ratedComplaints.stream()
+                .mapToInt(Complaint::getRating)
+                .average()
+                .orElse(0.0);
+
+        long satisfiedCount = ratedComplaints.stream()
+                .filter(c -> Boolean.TRUE.equals(c.getSatisfied()))
+                .count();
+
+        double satisfactionRate = (satisfiedCount * 100.0) / ratedComplaints.size();
+
+        // Group ratings by star count
+        java.util.Map<Integer, Long> ratingDistribution = ratedComplaints.stream()
+                .collect(java.util.stream.Collectors.groupingBy(
+                        Complaint::getRating,
+                        java.util.stream.Collectors.counting()));
+
+        stats.put("totalRatings", ratedComplaints.size());
+        stats.put("averageRating", Math.round(avgRating * 100.0) / 100.0);
+        stats.put("satisfactionRate", Math.round(satisfactionRate * 100.0) / 100.0);
+        stats.put("satisfiedCount", satisfiedCount);
+        stats.put("ratingDistribution", ratingDistribution);
+
+        // Include recent ratings with feedback
+        java.util.List<java.util.Map<String, Object>> recentRatings = ratedComplaints.stream()
+                .limit(10)
+                .map(c -> {
+                    java.util.Map<String, Object> ratingInfo = new java.util.HashMap<>();
+                    ratingInfo.put("complaintId", c.getId());
+                    ratingInfo.put("rating", c.getRating());
+                    ratingInfo.put("feedback", c.getFeedback());
+                    ratingInfo.put("satisfied", c.getSatisfied());
+                    ratingInfo.put("ratedAt", c.getRatedAt());
+                    ratingInfo.put("department", c.getDepartment());
+                    return ratingInfo;
+                })
+                .collect(java.util.stream.Collectors.toList());
+
+        stats.put("recentRatings", recentRatings);
+
+        return stats;
     }
 }

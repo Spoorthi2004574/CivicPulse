@@ -27,23 +27,30 @@ const OfficerComplaintDashboard = () => {
 
     const fetchComplaints = async () => {
         try {
-            const response = await complaintAPI.getOfficerComplaints()
-            setComplaints(response.data)
+            const [complaintsResponse, ratingsResponse] = await Promise.all([
+                complaintAPI.getOfficerComplaints(),
+                complaintAPI.getOfficerRatings()
+            ])
+
+            setComplaints(complaintsResponse.data)
 
             // Calculate stats including overdue
             const now = new Date()
-            const overdueCount = response.data.filter(c => {
+            const overdueCount = complaintsResponse.data.filter(c => {
                 if (c.status === 'RESOLVED' || c.status === 'REJECTED') return false
                 if (!c.deadline) return false
                 return new Date(c.deadline) < now
             }).length
 
             setStats({
-                total: response.data.length,
-                pending: response.data.filter(c => c.status === 'PENDING').length,
-                inProgress: response.data.filter(c => c.status === 'IN_PROGRESS').length,
-                resolved: response.data.filter(c => c.status === 'RESOLVED').length,
+                total: complaintsResponse.data.length,
+                pending: complaintsResponse.data.filter(c => c.status === 'PENDING').length,
+                inProgress: complaintsResponse.data.filter(c => c.status === 'IN_PROGRESS').length,
+                resolved: complaintsResponse.data.filter(c => c.status === 'RESOLVED').length,
                 overdue: overdueCount,
+                averageRating: ratingsResponse.data.averageRating || 0,
+                satisfactionRate: ratingsResponse.data.satisfactionRate || 0,
+                totalRatings: ratingsResponse.data.totalRatings || 0
             })
 
             setLoading(false)
@@ -215,6 +222,24 @@ const OfficerComplaintDashboard = () => {
                         </div>
                     </div>
                 )}
+                {stats.totalRatings > 0 && (
+                    <>
+                        <div className="stat-card stat-card-rating">
+                            <div className="stat-icon">⭐</div>
+                            <div className="stat-content">
+                                <div className="stat-value">{stats.averageRating.toFixed(1)}</div>
+                                <div className="stat-label">Avg Rating ({stats.totalRatings} ratings)</div>
+                            </div>
+                        </div>
+                        <div className="stat-card stat-card-satisfaction">
+                            <div className="stat-icon">😊</div>
+                            <div className="stat-content">
+                                <div className="stat-value">{stats.satisfactionRate.toFixed(0)}%</div>
+                                <div className="stat-label">Satisfaction Rate</div>
+                            </div>
+                        </div>
+                    </>
+                )}
             </div>
 
             {/* Complaints Section */}
@@ -321,6 +346,25 @@ const OfficerComplaintDashboard = () => {
                                                             View Uploaded Proof
                                                         </a>
                                                     </span>
+                                                </div>
+                                            )}
+                                            {complaint.rating && (
+                                                <div className="detail-item rating-info">
+                                                    <span className="detail-icon">⭐</span>
+                                                    <span className="detail-label">Rating:</span>
+                                                    <span className="detail-value">
+                                                        {'⭐'.repeat(complaint.rating)} ({complaint.rating}/5)
+                                                        {complaint.satisfied && (
+                                                            <span className="satisfied-badge-small">✅ Satisfied</span>
+                                                        )}
+                                                    </span>
+                                                </div>
+                                            )}
+                                            {complaint.feedback && (
+                                                <div className="detail-item feedback-info">
+                                                    <span className="detail-icon">💬</span>
+                                                    <span className="detail-label">Feedback:</span>
+                                                    <span className="detail-value feedback-text">"{complaint.feedback}"</span>
                                                 </div>
                                             )}
                                         </div>

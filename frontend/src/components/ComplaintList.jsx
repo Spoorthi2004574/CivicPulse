@@ -129,6 +129,16 @@ const ComplaintList = () => {
         }
     }
 
+    const handleSatisfiedToggle = async (complaintId, currentSatisfied) => {
+        try {
+            await complaintAPI.markSatisfied(complaintId, !currentSatisfied)
+            toast.success(currentSatisfied ? 'Satisfaction removed' : 'Marked as satisfied!')
+            fetchComplaints()
+        } catch (error) {
+            toast.error(error.response?.data || 'Failed to update satisfaction status')
+        }
+    }
+
     if (loading) {
         return (
             <div className="loading-container">
@@ -208,9 +218,32 @@ const ComplaintList = () => {
                                     </div>
                                 )}
                                 {complaint.rating && (
-                                    <div className="rating-display">
-                                        <strong>Your Rating:</strong> {'⭐'.repeat(complaint.rating)}
-                                        {complaint.feedback && <p><em>"{complaint.feedback}"</em></p>}
+                                    <div className="rating-section">
+                                        <div className="rating-display">
+                                            <strong>Your Rating:</strong> {'⭐'.repeat(complaint.rating)}
+                                            {complaint.feedback && <p className="feedback-text"><em>"{complaint.feedback}"</em></p>}
+                                        </div>
+                                        {complaint.satisfied && (
+                                            <div className="satisfaction-badge satisfied">
+                                                ✅ Marked as Satisfied
+                                                <span className="satisfaction-date">
+                                                    on {new Date(complaint.satisfiedAt).toLocaleDateString()}
+                                                </span>
+                                            </div>
+                                        )}
+                                        {!complaint.satisfied && complaint.status === 'RESOLVED' && (
+                                            <div className="complaint-actions">
+                                                <button
+                                                    className="btn-satisfied"
+                                                    onClick={() => handleSatisfiedToggle(complaint.id, complaint.satisfied)}
+                                                >
+                                                    ✅ Mark as Satisfied
+                                                </button>
+                                                <button className="btn-reopen" onClick={() => handleReopenClick(complaint.id)}>
+                                                    🔄 Reopen Complaint
+                                                </button>
+                                            </div>
+                                        )}
                                     </div>
                                 )}
                                 {complaint.reopened && (

@@ -231,6 +231,46 @@
     color: #1e40af;
 }
 
+.rating-cell,
+.satisfaction-cell {
+    text-align: center;
+}
+
+.rating-display-admin {
+    font-size: 13px;
+    color: #f59e0b;
+    font-weight: 600;
+}
+
+.no-rating {
+    color: #9ca3af;
+    font-size: 12px;
+    font-style: italic;
+}
+
+.satisfaction-badge-admin {
+    padding: 5px 12px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.satisfaction-badge-admin.satisfied {
+    background: linear-gradient(135deg, #d1e7dd 0%, #badbcc 100%);
+    color: #0f5132;
+}
+
+.satisfaction-badge-admin.not-satisfied {
+    background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+    color: #991b1b;
+}
+
+.satisfaction-badge-admin.not-rated {
+    background: #f3f4f6;
+    color: #9ca3af;
+}
+
 .action-buttons {
     display: flex;
     gap: 8px;
