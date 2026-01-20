@@ -30,6 +30,7 @@ public class ComplaintController {
             @RequestParam(value = "latitude", required = false) Double latitude,
             @RequestParam(value = "longitude", required = false) Double longitude,
             @RequestParam(value = "locationAddress", required = false) String locationAddress,
+            @RequestParam(value = "zone", required = false) String zone,
             @RequestPart(value = "photo", required = false) MultipartFile photo) {
         try {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -41,6 +42,7 @@ public class ComplaintController {
             request.setLatitude(latitude);
             request.setLongitude(longitude);
             request.setLocationAddress(locationAddress);
+            request.setZone(zone);
 
             Complaint complaint = complaintService.fileComplaint(request, photo, email);
             return ResponseEntity.ok(complaint);

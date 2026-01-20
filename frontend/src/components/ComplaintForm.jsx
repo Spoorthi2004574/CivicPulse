@@ -10,6 +10,7 @@ const ComplaintForm = () => {
         latitude: null,
         longitude: null,
         locationAddress: '',
+        zone: '',
     })
     const [photo, setPhoto] = useState(null)
     const [loading, setLoading] = useState(false)
@@ -25,6 +26,8 @@ const ComplaintForm = () => {
         'Parks',
         'Other'
     ]
+
+    const zones = ['North', 'South', 'East', 'West', 'Central']
 
     useEffect(() => {
         if (useGPS && navigator.geolocation) {
@@ -76,6 +79,9 @@ const ComplaintForm = () => {
             if (formData.locationAddress) {
                 formDataToSend.append('locationAddress', formData.locationAddress)
             }
+            if (formData.zone) {
+                formDataToSend.append('zone', formData.zone)
+            }
 
             if (photo) {
                 formDataToSend.append('photo', photo)
@@ -91,6 +97,7 @@ const ComplaintForm = () => {
                 latitude: null,
                 longitude: null,
                 locationAddress: '',
+                zone: '',
             })
             setPhoto(null)
             setUseGPS(false)
@@ -121,6 +128,21 @@ const ComplaintForm = () => {
                             <option value="">Select Department</option>
                             {departments.map(dept => (
                                 <option key={dept} value={dept}>{dept}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div className="form-group">
+                        <label>Zone *</label>
+                        <select
+                            name="zone"
+                            value={formData.zone}
+                            onChange={handleChange}
+                            required
+                        >
+                            <option value="">Select Zone</option>
+                            {zones.map(z => (
+                                <option key={z} value={z}>{z}</option>
                             ))}
                         </select>
                     </div>

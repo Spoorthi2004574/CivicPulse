@@ -10,6 +10,7 @@ const Signup = () => {
     password: '',
     role: 'CITIZEN',
     department: '',
+    zone: '',
   })
   const [loading, setLoading] = useState(false)
   const { signup } = useAuth()
@@ -31,6 +32,7 @@ const Signup = () => {
       password: formData.password,
       role: formData.role,
       department: formData.role === 'OFFICER' ? formData.department : null,
+      zone: formData.role === 'OFFICER' ? formData.zone : 'Central', // Citizens default to Central or we can allow them to pick
     }
 
     setLoading(true)
@@ -104,6 +106,24 @@ const Signup = () => {
                 required
                 placeholder="e.g., Transportation, Health, etc."
               />
+            </div>
+          )}
+          {formData.role === 'OFFICER' && (
+            <div className="form-group">
+              <label>Zone</label>
+              <select
+                name="zone"
+                value={formData.zone}
+                onChange={handleChange}
+                required
+              >
+                <option value="">Select Zone</option>
+                <option value="North">North</option>
+                <option value="South">South</option>
+                <option value="East">East</option>
+                <option value="West">West</option>
+                <option value="Central">Central</option>
+              </select>
             </div>
           )}
           <button type="submit" className="btn" disabled={loading}>

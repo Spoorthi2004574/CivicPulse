@@ -35,4 +35,34 @@ public interface ComplaintRepository extends JpaRepository<Complaint, Long> {
 
     // Find complaints by officer sorted by creation date
     List<Complaint> findByAssignedOfficerIdOrderByCreatedAtDesc(Long officerId);
+
+    // Analytics Queries
+    @Query("SELECT c.department, COUNT(c) FROM Complaint c GROUP BY c.department")
+    List<Object[]> countByDepartment();
+
+    @Query("SELECT c.zone, COUNT(c) FROM Complaint c WHERE c.zone IS NOT NULL GROUP BY c.zone")
+    List<Object[]> countByZone();
+
+    @Query("SELECT COUNT(c) FROM Complaint c WHERE c.status = 'RESOLVED' AND c.resolvedAt <= c.deadline")
+    Long countSlaMet();
+
+    @Query("SELECT COUNT(c) FROM Complaint c WHERE c.status = 'RESOLVED' AND c.resolvedAt > c.deadline")
+    Long countSlaViolated();
+
+    @Query("SELECT c.zone, c.locationAddress, COUNT(c) FROM Complaint c GROUP BY c.zone, c.locationAddress HAVING COUNT(c) > 1 ORDER BY COUNT(c) DESC")
+    List<Object[]> findRedZones();
+
+    // For Officer (Zone-specific)
+    @Query("SELECT c.department, COUNT(c) FROM Complaint c WHERE c.zone = :zone GROUP BY c.department")
+    List<Object[]> countByDepartmentInZone(@Param("zone") String zone);
+
+    @Query("SELECT COUNT(c) FROM Complaint c WHERE c.zone = :zone AND c.status = 'RESOLVED' AND c.resolvedAt <= c.deadline")
+    Long countSlaMetInZone(@Param("zone") String zone);
+
+    @Query("SELECT COUNT(c) FROM Complaint c WHERE c.zone = :zone AND c.status = 'RESOLVED' AND c.resolvedAt > c.deadline")
+    Long countSlaViolatedInZone(@Param("zone") String zone);
+
+    Long countByZoneAndStatus(String zone, String status);
+
+    Long countByZone(String zone);
 }

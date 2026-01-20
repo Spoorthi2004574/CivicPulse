@@ -89,6 +89,7 @@ public class AdminServiceImpl implements AdminService {
                 .role(user.getRole())
                 .status(user.getStatus())
                 .department(user.getDepartment())
+                .zone(user.getZone())
                 .createdAt(user.getCreatedAt())
                 .updatedAt(user.getUpdatedAt())
                 .build();

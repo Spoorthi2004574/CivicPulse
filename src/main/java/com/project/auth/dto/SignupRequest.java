@@ -12,24 +12,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SignupRequest {
-    
+
     @NotBlank(message = "Name is required")
     private String name;
-    
+
     @NotBlank(message = "Email is required")
     @Email(message = "Email should be valid")
     private String email;
-    
+
     @NotBlank(message = "Password is required")
     private String password;
-    
+
     @NotNull(message = "Role is required")
     private Role role;
-    
+
     private String department;
+    private String zone;
 }
-
-
-
-
-

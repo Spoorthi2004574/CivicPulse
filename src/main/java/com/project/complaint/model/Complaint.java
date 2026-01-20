@@ -45,6 +45,9 @@ public class Complaint {
     @Column(nullable = true)
     private String priority; // HIGH, MEDIUM, LOW
 
+    @Column(nullable = true)
+    private String zone;
+
     @ManyToOne
     @JoinColumn(name = "citizen_id", nullable = false)
     private User citizen;
@@ -56,6 +59,7 @@ public class Complaint {
     @Column(name = "deadline")
     private LocalDateTime deadline;
 
+    @Builder.Default
     @Column(name = "escalated")
     private Boolean escalated = false;
 
@@ -93,12 +97,14 @@ public class Complaint {
     @Column(name = "rated_at")
     private LocalDateTime ratedAt;
 
+    @Builder.Default
     @Column(name = "satisfied")
     private Boolean satisfied = false;
 
     @Column(name = "satisfied_at")
     private LocalDateTime satisfiedAt;
 
+    @Builder.Default
     @Column(name = "reopened")
     private Boolean reopened = false;
 
@@ -107,6 +113,9 @@ public class Complaint {
 
     @Column(name = "reopen_reason", length = 500)
     private String reopenReason;
+
+    @Column(name = "resolved_at")
+    private LocalDateTime resolvedAt;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)

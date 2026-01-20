@@ -3,13 +3,14 @@ import { useAuth } from '../context/AuthContext'
 import ComplaintForm from './ComplaintForm'
 import ComplaintList from './ComplaintList'
 import OfficerComplaintDashboard from './OfficerComplaintDashboard'
+import AnalyticsDashboard from './AnalyticsDashboard'
 
 const UserDashboard = () => {
   const { user } = useAuth()
   const [activeTab, setActiveTab] = useState('overview')
 
-  // Officer sees their assigned complaints
-  if (user?.role === 'OFFICER') {
+  // Officer/Operator sees their specific dashboards
+  if (user?.role === 'OFFICER' || user?.role === 'OPERATOR') {
     if (user?.status === 'PENDING_VERIFICATION') {
       return (
         <div className="container">
@@ -37,7 +38,35 @@ const UserDashboard = () => {
       )
     }
 
-    return <OfficerComplaintDashboard />
+    if (user?.role === 'OPERATOR') {
+      return <OfficerComplaintDashboard />
+    }
+
+    // Role is OFFICER - Show Analytics and link to complaints
+    return (
+      <div className="container" style={{ padding: '0' }}>
+        <div className="dashboard-tabs" style={{ padding: '0 20px', margin: '20px 0' }}>
+          <button
+            className={activeTab === 'analytics' ? 'tab active' : 'tab'}
+            onClick={() => setActiveTab('analytics')}
+          >
+            Zone Analytics
+          </button>
+          <button
+            className={activeTab === 'complaints' ? 'tab active' : 'tab'}
+            onClick={() => setActiveTab('complaints')}
+          >
+            Detailed Complaints
+          </button>
+        </div>
+
+        {activeTab === 'analytics' || activeTab === 'overview' ? (
+          <AnalyticsDashboard role="OFFICER" />
+        ) : (
+          <OfficerComplaintDashboard />
+        )}
+      </div>
+    )
   }
 
   // Citizen sees complaint filing and their complaints

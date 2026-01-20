@@ -4,6 +4,7 @@ import { toast } from 'react-toastify'
 import { useAuth } from '../context/AuthContext'
 import SecretKeyModal from './SecretKeyModal'
 import AdminComplaintDashboard from './AdminComplaintDashboard'
+import AnalyticsDashboard from './AnalyticsDashboard'
 import './AdminDashboard.css'
 
 const AdminDashboard = () => {
@@ -143,6 +144,13 @@ const AdminDashboard = () => {
             <span className="tab-icon">📋</span>
             Complaint Management
           </button>
+          <button
+            className={`admin-tab ${activeTab === 'analytics' ? 'active' : ''}`}
+            onClick={() => setActiveTab('analytics')}
+          >
+            <span className="tab-icon">📊</span>
+            Analytics
+          </button>
         </div>
 
         {/* Content */}
@@ -222,6 +230,8 @@ const AdminDashboard = () => {
         )}
 
         {activeTab === 'complaints' && <AdminComplaintDashboard />}
+
+        {activeTab === 'analytics' && <AnalyticsDashboard role="ADMIN" />}
       </div>
 
       <SecretKeyModal

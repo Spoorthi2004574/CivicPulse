@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "users", uniqueConstraints = {
-    @UniqueConstraint(columnNames = "email")
+        @UniqueConstraint(columnNames = "email")
 })
 @Data
 @NoArgsConstructor
@@ -44,6 +44,9 @@ public class User {
     @Column(nullable = true)
     private String department;
 
+    @Column(nullable = true)
+    private String zone;
+
     @Column(name = "secret_key_hash", nullable = true)
     private String secretKeyHash;
 
@@ -55,8 +58,3 @@ public class User {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 }
-
-
-
-
-

@@ -20,11 +20,7 @@ public class UserResponse {
     private Role role;
     private Status status;
     private String department;
+    private String zone;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }
-
-
-
-
-

@@ -102,4 +102,8 @@ export const complaintAPI = {
   getOfficerRatings: () => api.get('/api/complaints/officer/ratings'),
 }
 
+export const analyticsAPI = {
+  getSummary: () => api.get('/api/analytics/summary'),
+}
+
 export default api

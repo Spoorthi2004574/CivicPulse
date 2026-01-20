@@ -46,6 +46,7 @@ public class ComplaintService {
                 .validationStatus("PENDING_VALIDATION")
                 .priority("LOW") // Default
                 .citizen(citizen)
+                .zone(request.getZone())
                 .build();
 
         return complaintRepository.save(complaint);
@@ -95,6 +96,11 @@ public class ComplaintService {
         } else {
             // Calculate deadline based on priority
             complaint.setDeadline(calculateDeadline(priority != null ? priority : complaint.getPriority()));
+        }
+
+        // If complaint has no zone, inherit from officer
+        if (complaint.getZone() == null || complaint.getZone().isEmpty()) {
+            complaint.setZone(officer.getZone());
         }
 
         return complaintRepository.save(complaint);
@@ -207,6 +213,11 @@ public class ComplaintService {
                 .orElseThrow(() -> new RuntimeException("Complaint not found"));
 
         complaint.setStatus(status);
+        if ("RESOLVED".equals(status)) {
+            complaint.setResolvedAt(java.time.LocalDateTime.now());
+        } else if ("IN_PROGRESS".equals(status) || "PENDING".equals(status)) {
+            complaint.setResolvedAt(null);
+        }
         return complaintRepository.save(complaint);
     }
 

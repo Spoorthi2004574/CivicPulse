@@ -49,6 +49,7 @@ public class AuthServiceImpl implements AuthService {
                 .password(passwordEncoder.encode(signupRequest.getPassword()))
                 .role(signupRequest.getRole())
                 .department(signupRequest.getDepartment())
+                .zone(signupRequest.getZone())
                 .build();
 
         // Set status based on role
@@ -76,13 +77,12 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public JwtResponse authenticateUser(LoginRequest loginRequest) {
-        // Authenticate user with Spring Security (throws exception if credentials are invalid)
+        // Authenticate user with Spring Security (throws exception if credentials are
+        // invalid)
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.getEmail(),
-                        loginRequest.getPassword()
-                )
-        );
+                        loginRequest.getPassword()));
 
         // Get user from database
         User user = userRepository.findByEmail(loginRequest.getEmail())
@@ -101,8 +101,8 @@ public class AuthServiceImpl implements AuthService {
             }
 
             // Verify secret key hash
-            if (user.getSecretKeyHash() == null || 
-                !passwordEncoder.matches(loginRequest.getSecretKey(), user.getSecretKeyHash())) {
+            if (user.getSecretKeyHash() == null ||
+                    !passwordEncoder.matches(loginRequest.getSecretKey(), user.getSecretKeyHash())) {
                 throw new RuntimeException("Invalid secret key");
             }
         }
